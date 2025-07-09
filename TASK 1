@@ -1,0 +1,37 @@
+import requests
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime
+
+
+sns.set(style="whitegrid")
+
+
+API_KEY = "https://api.openweathermap.org/data/2.5/forecast?q=Delhi&appid=YOUR_API_KEY&units=metric"
+CITY = "Delhi"
+URL = f"http://api.openweathermap.org/data/2.5/forecast?q={CITY}&appid={API_KEY}&units=metric"
+
+
+response = requests.get(URL)
+data = response.json()
+
+
+dates = []
+temperatures = []
+
+for item in data["list"]:
+    dt = datetime.fromtimestamp(item["dt"])
+    temp = item["main"]["temp"]
+    dates.append(dt)
+    temperatures.append(temp)
+
+
+plt.figure(figsize=(12, 6))
+plt.plot(dates, temperatures, marker='o', color='orange')
+plt.title(f"5-Day Temperature Forecast for {CITY}")
+plt.xlabel("Date & Time")
+plt.ylabel("Temperature (°C)")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.grid(True)
+plt.show()
